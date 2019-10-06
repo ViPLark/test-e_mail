@@ -2,7 +2,7 @@ from django.contrib import messages
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from .models import User, Email
+from .models import User, Email, Inbox
 
 
 class UserEmailSerializer(serializers.EmailField):
@@ -36,3 +36,13 @@ class EmailSerializer(serializers.ModelSerializer):
             return users
 
         raise ValidationError('Check the email addresses into the "TO" field')
+
+
+class InboxSerializer(serializers.ModelSerializer):
+    FROM = serializers.EmailField(source='email.from_user.email')
+    title = serializers.CharField(source='email.title')
+    text = serializers.CharField(source='email.text')
+
+    class Meta:
+        model = Inbox
+        fields = ('FROM', 'title', 'text', 'is_new')

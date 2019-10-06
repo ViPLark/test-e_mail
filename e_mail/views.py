@@ -1,6 +1,14 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 
-from .serializers import EmailSerializer
+from .models import Inbox
+from .serializers import EmailSerializer, InboxSerializer
+
+
+class InboxListView(ListAPIView):
+    serializer_class = InboxSerializer
+
+    def get_queryset(self):
+        return Inbox.objects.filter(user=self.request.user)
 
 
 class EmailView(CreateAPIView):
