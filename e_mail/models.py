@@ -16,6 +16,13 @@ class Email(models.Model):
     def __str__(self):
         return self.title
 
+    def send(self):
+        Sent.objects.create(user=self.from_user, email=self, is_new=False)
+        inbox_letters = (
+            Inbox(user=to_user, email=self) for to_user in self.to_users.all()
+        )
+        Inbox.objects.bulk_create(inbox_letters)
+
 
 class Catalog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
