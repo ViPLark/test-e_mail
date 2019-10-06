@@ -25,6 +25,13 @@ class SentListView(ListAPIView):
         return Sent.objects.filter(user=self.request.user)
 
 
+class SentDetailView(RetrieveDestroyAPIView):
+    serializer_class = SentSerializer
+
+    def get_queryset(self):
+        return Sent.objects.filter(user=self.request.user)
+
+
 class EmailView(CreateAPIView):
     serializer_class = EmailSerializer
 
